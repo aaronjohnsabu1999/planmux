@@ -1,8 +1,7 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include <bits/stdc++.h>
 #include <omp.h>
 
 # define INF 0x3f3f3f3f

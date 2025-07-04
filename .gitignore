@@ -1,1 +1,65 @@
-**/a.out
+**/*.out
+
+# Compiled object files
+*.o
+*.obj
+*.lo
+*.ko
+*.elf
+
+# Executables and binaries
+*.exe
+*.out
+*.a
+*.so
+*.dll
+*.dylib
+
+# CUDA build outputs
+*.cu.o
+*.ptx
+*.cubin
+*.linkinfo
+
+# Debug and profiling files
+*.d
+*.gcno
+*.gcda
+*.gcov
+*.nvvp
+*.ncu-rep
+
+# Logs and job outputs
+*.log
+*.out_node_*
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.code-workspace
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Backup/swap/temporary files
+*~
+*.swp
+*.tmp
+*.bak
+
+# Build system artifacts
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Python cache (if used for plotting)
+__pycache__/
+*.py[cod]
+
+# Archive files
+*.zip
+*.tar
+*.tar.gz
+*.7z
