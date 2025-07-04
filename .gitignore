@@ -1,5 +1,3 @@
-**/*.out
-
 # Compiled object files
 *.o
 *.obj
@@ -9,6 +7,8 @@
 
 # Executables and binaries
 *.exe
+*.exp
+*.lib
 *.out
 *.a
 *.so

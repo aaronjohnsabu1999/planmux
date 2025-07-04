@@ -7,13 +7,26 @@
 #SBATCH --output=job.%J.out_node_40
 #SBATCH --partition=hm
 
-module load compiler/intel/2018.2.199
-g++ -std=c++17 -o dijkstra_openmp dijkstra_openmp.cpp -fopenmp
+# Read values from config/default.yaml
+config="./config/default.yaml"
 
-for numThreads in 1 2 4 8 16
+get_yaml_array() {
+  key=$1
+  grep "^$key:" "$config" | sed "s/$key: \[//" | sed 's/\]//' | tr ',' ' '
+}
+
+Ns=$(get_yaml_array N)
+threads=$(get_yaml_array num_threads)
+num_iters=$(grep "^num_iters:" "$config" | awk '{print $2}')
+
+# Compile
+module load compiler/intel/2018.2.199
+g++ dijkstra_openmp.cpp -o dijkstra_openmp -std=c++17 -fopenmp
+
+for num_threads in $threads
 do
   sleep 0.1
-  export OMP_NUM_THREADS=$numThreads
+  export OMP_NUM_THREADS=$num_threads
   rm USA_NY_out.txt
   rm USA_NY_parallel_out.txt
   ./dijkstra_openmp

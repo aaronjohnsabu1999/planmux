@@ -2,9 +2,12 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include <bits/stdc++.h>
+#include <list>
+#include <utility>
+#include <cstdlib>
+#include <algorithm>
 
-#define INFTY   1e8
+#define INFTY 1e8
 
 using namespace std;
 
@@ -61,7 +64,7 @@ void Graph::modifyEdge(int u, int v, int w)
 int main(int argv, char **argc)
 {
   const int V    = strtol(argc[1], (char **)NULL, 10), E = 3*V;
-  int numThreads = strtol(argc[2], (char **)NULL, 10);
+  int num_threads = strtol(argc[2], (char **)NULL, 10);
   int *graph = new int[V*V];
   int *dist  = new int[V*V];
   Graph g(V);
@@ -70,7 +73,7 @@ int main(int argv, char **argc)
   for (int j = 1; j < E; j++)
     g.addEdge(rand()%(V) + 0, rand()%(V) + 0, rand()%(50) + 1);
   
-  omp_set_num_threads(numThreads);
+  omp_set_num_threads(num_threads);
   
   double t1 = omp_get_wtime();
   
@@ -96,7 +99,7 @@ int main(int argv, char **argc)
       graph[(i / V)*V + (i % V)] = dist[(i / V)*V + (i % V)];
   }
   double t2 = omp_get_wtime() - t1;
-  cout<<"Time taken for OpenMP implementation with (V = \t"<<V<<") and (numThreads = \t"<<numThreads<<") = "<<t2<<endl;
+  cout<<"Time taken for OpenMP implementation with (V = \t"<<V<<") and (num_threads = \t"<<num_threads<<") = "<<t2<<endl;
   
   delete graph;
   delete dist;

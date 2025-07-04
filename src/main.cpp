@@ -1,7 +1,10 @@
-#include <bits/stdc++.h>
-#include <fstream>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vector>
+#include <list>
+#include <utility>
+#include <string>
 
 using namespace std;
 

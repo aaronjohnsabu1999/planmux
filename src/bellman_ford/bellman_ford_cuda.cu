@@ -1,10 +1,13 @@
-#include <bits/stdc++.h>
 #include <stdio.h>
 #include <climits>
 #include <random>
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <sstream>
+#include <string>
+
+#define INFTY 1e8
 
 using namespace std;
   
@@ -15,12 +18,12 @@ struct Edge
     
 __global__ void SetupDist(int V, int *dist, int src) 
 {	
-	// Initialize Distances as INT_Max
+	// Initialize Distances as INFTY
     int index = blockIdx.x * blockDim.x + threadIdx.x;
     int stride = blockDim.x * gridDim.x;
 
     for (int i = index; i < V; i += stride)
-        dist[i] = INT_MAX;
+        dist[i] = INFTY;
     dist[src] = 0;
 }
   
@@ -36,7 +39,7 @@ __global__ void BellmanFord(int V, int E, struct Edge* edges, int *dist) {
     int weight = edges[j].weight;
 
  // Atomic to avoid two threads writing simultaneously
-	if (dist[u] != INT_MAX && dist[u] + weight < dist[v])
+	if (dist[u] != INFTY && dist[u] + weight < dist[v])
 	  atomicMin(&dist[v], dist[u] + weight);
   }
   return;
@@ -53,7 +56,7 @@ __global__ void Check_Neg_Cycle(int E, struct Edge* edges, int *dist)
         int u = edges[i].src;
         int v = edges[i].dest;
         int weight = edges[i].weight;
-        if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+        if (dist[u] != INFTY && dist[u] + weight < dist[v]) {
             flag = -1;
         }
     }

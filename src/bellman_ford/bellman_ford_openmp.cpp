@@ -1,5 +1,9 @@
-#include <bits/stdc++.h>
-  
+#include <cstdio>
+#include <climits>
+#include <cstdlib>
+
+#define INFTY 1e8
+
 struct Edge {
     int src, dest, weight;
 };
@@ -31,12 +35,12 @@ void BellmanFord(struct Graph* graph, int src)
 {
     int V = graph->V;
     int E = graph->E;
-    int dist[V];
+    int* dist = new int[V];
   
     // Step 1: Initialize distances from src to all other vertices as INFINITE
     #pragma omp parallel for
     for (int i = 0; i < V; i++)
-        dist[i] = INT_MAX;
+        dist[i] = INFTY;
 
     dist[src] = 0;
   
@@ -50,7 +54,7 @@ void BellmanFord(struct Graph* graph, int src)
             int u = graph->edge[j].src;
             int v = graph->edge[j].dest;
             int weight = graph->edge[j].weight;
-            if (dist[u] != INT_MAX && dist[u] + weight < dist[v])
+            if (dist[u] != INFTY && dist[u] + weight < dist[v])
                {
                #pragma omp atomic write
                 dist[v] = dist[u] + weight;
@@ -66,7 +70,7 @@ void BellmanFord(struct Graph* graph, int src)
         int u = graph->edge[i].src;
         int v = graph->edge[i].dest;
         int weight = graph->edge[i].weight;
-        if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+        if (dist[u] != INFTY && dist[u] + weight < dist[v]) {
             flag = -1;
         }
     }
@@ -75,6 +79,7 @@ void BellmanFord(struct Graph* graph, int src)
     printf("Graph contains negative weight cycle");
     //printArr(dist, V);
     
+    delete[] dist;
     return;
 }
   

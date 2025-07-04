@@ -1,10 +1,15 @@
-#include <bits/stdc++.h>
-#include <fstream>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vector>
+#include <list>
+#include <set>
+#include <utility>
+#include <string>
 #include <omp.h>
 
-# define INF 0x3f3f3f3f
+#define INFTY 1e8
+
 using namespace std;
 
 // This class represents a directed graph
@@ -47,8 +52,8 @@ void Graph::Dijkstras_Algo(int src, int dest)
 	// Create a set to store vertices that are being preprocessed
 	set< pair<int, int> > setds;
 
-	// Create a vector for distances and initialize all distances as infinite (INF)
-	vector<int> dist(V, INF);
+	// Create a vector for distances and initialize all distances as infinite (INFTY)
+	vector<int> dist(V, INFTY);
 	vector<int> parent(V, 0); 
 	parent[src] = -1;
 	// Insert source itself in Set and initialize its distance as 0.
@@ -84,13 +89,13 @@ void Graph::Dijkstras_Algo(int src, int dest)
 			if (dist[v] > dist[u] + weight)
 			{
 				parent[v] = u;
-				/* If distance of v is not INF then it must be in
+				/* If distance of v is not INFTY then it must be in
 					our set, so removing it and inserting again
 					with updated less distance.
 					Note : We extract only those vertices from Set
 					for which distance is finalized. So for them,
 					we would never reach here. */
-				if (dist[v] != INF)
+				if (dist[v] != INFTY)
 					setds.erase(setds.find(make_pair(dist[v], v)));
 				// Updating distance of v
 				dist[v] = dist[u] + weight;
@@ -174,7 +179,7 @@ void Graph::Dijkstras_Algo_omp(int src, int dest)
 
 	int *dist = new int[vertices];
 	for(i=0; i<vertices; i++){
-		dist[i] = INF;
+		dist[i] = INFTY;
 	}
 	dist[src] = 0;
 
@@ -218,11 +223,11 @@ void Graph::Dijkstras_Algo_omp(int src, int dest)
 
 			#pragma omp single
 			{
-				d = INF;
+				d = INFTY;
 				v = -1;
 			}
 
-			min_d = INF;
+			min_d = INFTY;
 			min_node = -1;
 			for (int i = first; i <= last; i++ )
 			{
