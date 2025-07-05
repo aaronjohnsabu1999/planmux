@@ -15,8 +15,8 @@ get_yaml_array() {
   grep "^$key:" "$config" | sed "s/$key: \[//" | sed 's/\]//' | tr ',' ' '
 }
 
-Ns=$(get_yaml_array N)
-threads=$(get_yaml_array num_threads)
+all_num_nodes=$(get_yaml_array all_num_nodes)
+all_num_threads=$(get_yaml_array all_num_threads)
 num_iters=$(grep "^num_iters:" "$config" | awk '{print $2}')
 
 # Compile
@@ -31,16 +31,13 @@ fi
 # Set the time format to seconds
 export TIMEFORMAT="%R"
 
-# Run the program with different values of N and number of threads
+# Run the program with different number of nodes and number of threads
 export OMP_NUM_THREADS=1  # Default to 1 thread, will be overridden in the loop
-for N in $Ns
-do
-  for iter in $(seq 1 $num_iters)
-  do
-    for num_threads in $threads
-    do
-	    sleep 0.1
-      ./floyd_warshall_openmp $N $num_threads
-	done
+for num_nodes in $all_num_nodes; do
+  for iter in $(seq 1 $num_iters); do
+    for num_threads in $all_num_threads; do
+      sleep 0.1
+      ./floyd_warshall_openmp $num_nodes $num_threads
+  	done
   done
 done

@@ -8,31 +8,36 @@ This repository provides serial and parallel implementations of three classical 
 
 ```
 planmux/
-├── assets/                         # Input datasets (by algorithm)
+├── assets/                         # Algorithm-specific result assets (plots, charts)
 │   ├── bellman_ford/
 │   ├── dijkstra/
 │   └── floyd_warshall/
-├── results/                        # Benchmarking results and analysis
-│   ├── results.pdf
-│   └── results.xlsx
-├── src/                            # Source code and job logs
-│   ├── main.cpp                    # Optional driver/main entry
-│   ├── USA-road-d_NY.txt           # Real-world NY road graph dataset
+├── config/                         # Runtime configuration files
+│   └── default.yaml
+├── results/                        # Benchmarking outputs
+│   ├── jobs/                       # SLURM or local job output logs
+│   ├── results.pdf                 # Consolidated result visualizations
+│   └── results.xlsx                # Raw performance data
+├── src/                            # All source code and executables
+│   ├── main.cpp                    # Entry point for general testing
+│   ├── USA-road-d_NY.txt           # Real-world graph dataset
 │   ├── bellman_ford/
-│   │   ├── Bellman_Ford_GPU.cu
-│   │   └── Bellman_Ford_OpenMP.cpp
+│   │   ├── bellman_ford_cuda.cu
+│   │   └── bellman_ford_openmp.cpp
 │   ├── dijkstra/
-│   │   ├── Dijkstra.cpp
-│   │   └── DijkstraOpenMP.sh
-│   ├── floyd_warshall/
-│   │   ├── jobs/                   # Output logs from Floyd-Warshall runs
-│   │   ├── FloydWarshall.cu
-│   │   ├── FloydWarshall.cpp
-│   │   └── FloydWarshallOpenMP.cpp
-├── presentation.pdf/pptx           # Final presentation slides
-├── report.pdf                      # Full project report
-├── LICENSE                         # License file (MIT)
-└── README.md                       # Project documentation
+│   │   ├── dijkstra_openmp.cpp
+│   │   └── dijkstra_openmp.sh
+│   └── floyd_warshall/
+│       ├── floyd_warshall_cuda.cu
+│       ├── floyd_warshall_cuda.sh
+│       ├── floyd_warshall_openmp.cpp
+│       └── floyd_warshall_openmp.sh
+├── .gitignore                      # Git ignored files and folders
+├── LICENSE                         # Project license (MIT)
+├── presentation.pdf                # Presentation (PDF version)
+├── presentation.pptx               # Presentation (PPTX version)
+├── report.pdf                      # Final technical report
+└── README.md                       # Project documentation (you are here)
 ```
 
 ---
@@ -51,31 +56,42 @@ planmux/
 
 ### Prerequisites
 
-- **Compiler**: `g++` with OpenMP support
-- **GPU Support**: NVIDIA GPU with CUDA Toolkit
-- Linux or WSL recommended for shell scripts
+- **C++ Compiler**: g++ with OpenMP support (`-fopenmp`)
+- **GPU Support**: NVIDIA GPU + CUDA Toolkit (`nvcc`)
+- **Shell Environment**: Bash (Linux, WSL, or Git Bash on Windows)
+- If on Windows, ensure Visual Studio Build Tools are installed and properly configured
+- For CUDA builds on Windows, you must provide the correct path to `cl.exe` via `-ccbin`
 
 ### Compilation Examples
 
 #### Dijkstra (OpenMP)
-
 ```bash
-g++ -fopenmp src/dijkstra/Dijkstra.cpp -o dijkstra_omp
-./dijkstra_omp
+g++ ./src/dijkstra/dijkstra_openmp.cpp -o dijkstra_openmp -fopenmp -std=c++17
+./dijkstra_openmp <num_nodes> <num_threads>
+```
+
+#### Bellman-Ford (OpenMP)
+```bash
+g++ ./src/bellman_ford/bellman_ford_openmp.cpp -o bellman_ford_openmp -fopenmp -std=c++17
+./bellman_ford_openmp <num_nodes> <num_threads>
 ```
 
 #### Bellman-Ford (CUDA)
-
 ```bash
-nvcc src/bellman_ford/Bellman_Ford_GPU.cu -o bellman_gpu
-./bellman_gpu
+nvcc ./src/bellman_ford/bellman_ford_cuda.cu -o bellman_ford_cuda -ccbin "C:/Path/To/cl.exe/Folder"
+./bellman_ford_cuda <num_nodes>
+```
+
+#### Floyd-Warshall (OpenMP)
+```bash
+g++ ./src/floyd_warshall/floyd_warshall_openmp.cpp -o floyd_warshall_openmp -fopenmp -std=c++17
+./floyd_warshall_openmp <num_nodes> <num_threads>
 ```
 
 #### Floyd-Warshall (CUDA)
-
 ```bash
-nvcc src/floyd_warshall/FloydWarshall.cu -o floyd_gpu
-./floyd_gpu
+nvcc ./src/floyd_warshall/floyd_warshall_cuda.cu -o floyd_warshall_cuda -ccbin "C:/Path/To/cl.exe/Folder"
+./floyd_warshall_cuda <num_nodes>
 ```
 
 ---

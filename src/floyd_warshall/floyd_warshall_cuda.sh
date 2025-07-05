@@ -8,8 +8,8 @@ get_yaml_array() {
   grep "^$key:" "$config" | sed "s/$key: \[//" | sed 's/\]//' | tr ',' ' '
 }
 
-Ns=$(get_yaml_array N)
-threads=$(get_yaml_array num_threads)
+all_num_nodes=$(get_yaml_array all_num_nodes)
+all_num_threads=$(get_yaml_array all_num_threads)
 num_iters=$(grep "^num_iters:" "$config" | awk '{print $2}')
 
 # Compile
@@ -25,12 +25,10 @@ fi
 export TIMEFORMAT="%R"
 
 # Run the program with different values of N
-for iter in $(seq 1 $num_iters)
-do
-  for N in $Ns
-  do
+for iter in $(seq 1 $num_iters); do
+  for num_nodes in $all_num_nodes; do
     sleep 0.1
-    echo "Running with N=$N, Iteration=$iter"
-    time ./floyd_warshall_cuda $N
+    echo "Running with num_nodes=$num_nodes, Iteration=$iter"
+    time ./floyd_warshall_cuda $num_nodes
   done
 done
